@@ -59,7 +59,7 @@ parser.add_argument(
     help='SuperGlue match threshold')
 
 parser.add_argument(
-    '--resize', type=int, nargs='+', default=[640, 480],
+    '--resize', type=int, nargs='+', default=[-1, -1],
     help='Resize the input image before running inference. If two numbers, '
             'resize to the exact dimensions, if one number, resize the max '
             'dimension, if -1, do not resize')

@@ -17,8 +17,8 @@ class SparseDataset(Dataset):
         self.files += [train_path + f for f in os.listdir(train_path)]
 
         self.nfeatures = nfeatures
-        self.sift = cv2.xfeatures2d.SIFT_create(nfeatures=self.nfeatures)
-        self.matcher = cv2.BFMatcher_create(cv2.NORM_L1, crossCheck=False)
+        self.sift = cv2.SIFT_create(nfeatures=self.nfeatures)
+        self.matcher = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
 
     def __len__(self):
         return len(self.files)
