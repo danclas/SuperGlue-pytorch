@@ -59,7 +59,7 @@ parser.add_argument(
     help='SuperGlue match threshold')
 
 parser.add_argument(
-    '--resize', type=int, nargs='+', default=[-1, -1],
+    '--resize', type=int, nargs='+', default=[-1],
     help='Resize the input image before running inference. If two numbers, '
             'resize to the exact dimensions, if one number, resize the max '
             'dimension, if -1, do not resize')
@@ -156,10 +156,10 @@ if __name__ == '__main__':
         print("### CUDA not available ###")
     optimizer = torch.optim.Adam(superglue.parameters(), lr=opt.learning_rate)
     mean_loss = []
-
     # start training
     for epoch in range(1, opt.epoch+1):
         epoch_loss = 0
+        pbar = tqdm(total=len(train_loader))
         superglue.double().train()
         for i, pred in enumerate(train_loader):
             for k in pred:
@@ -185,7 +185,7 @@ if __name__ == '__main__':
             superglue.zero_grad()
             Loss.backward()
             optimizer.step()
-
+            pbar.update(1)
             # for every 50 images, print progress and visualize the matches
             if (i+1) % 50 == 0:
                 print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
@@ -227,5 +227,6 @@ if __name__ == '__main__':
         torch.save(superglue, model_out_path)
         print("Epoch [{}/{}] done. Epoch Loss {}. Checkpoint saved to {}"
             .format(epoch, opt.epoch, epoch_loss, model_out_path))
+        pbar.close()
         
 
